@@ -18,7 +18,7 @@ loginForm.addEventListener("submit", async (event) => {
 
         if (postResponse.status === 200) {
             localStorage.setItem("token", postResponse.data.token);
-            console.log("Login succesfull");
+            window.location.href = "../views/chitchat.html"
         }
         resetForm(event);
     } catch (error) {

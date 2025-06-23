@@ -1,0 +1,27 @@
+{
+  "name": "groupchatapp-like-whatsapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start":"nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhishektripathi-dev/GroupChatApp-like-Whatsapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abhishektripathi-dev/GroupChatApp-like-Whatsapp/issues"
+  },
+  "homepage": "https://github.com/abhishektripathi-dev/GroupChatApp-like-Whatsapp#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

@@ -6,7 +6,7 @@ loginForm.addEventListener("submit", async (event) => {
     errorEl.innerHTML = "";
 
     const formData = {
-        email: event.target.email.value,
+        phone: event.target.phonenumber.value,
         password: event.target.password.value,
     };
 
@@ -18,6 +18,7 @@ loginForm.addEventListener("submit", async (event) => {
 
         if (postResponse.status === 200) {
             localStorage.setItem("token", postResponse.data.token);
+            console.log("Login succesfull");
         }
         resetForm(event);
     } catch (error) {
@@ -30,7 +31,7 @@ loginForm.addEventListener("submit", async (event) => {
 });
 
 function resetForm(event) {
-    event.target.email.value = "";
+    event.target.phonenumber.value = "";
     event.target.password.value = "";
 }
 

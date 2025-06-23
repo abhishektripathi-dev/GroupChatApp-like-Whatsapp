@@ -1,12 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-dotenv.config();
 
 const sequelize = require("./util/database");
 
 const userRoutes = require("./routes/userRoutes");
 
+dotenv.config();
 const PORT = process.env.PORT;
 
 const app = express();
@@ -19,11 +19,11 @@ app.use("/api/auth", userRoutes);
 sequelize
     .sync()
     .then(() => {
-        console.log("DB is sync");
-        app.listen(PORT, () => {
-            console.log(`Server is runnig on PORT ${PORT}.`);
-        });
+        console.log("Database synced successfully.");
+        app.listen(PORT, () =>
+            console.log(`Server running on http://localhost:${PORT}`)
+        );
     })
     .catch((err) => {
-        console.log(err);
+        console.error("Error syncing database:", err);
     });

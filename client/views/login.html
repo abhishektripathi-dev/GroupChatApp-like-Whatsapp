@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chit Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <header>
+        <h3>CHiT CHAT</h3>
+    </header>
+
+    <main>
+        <section id="login">
+            <h3>Log In</h3>
+            <form action="" id="login-form">
+                <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                <button type="submit">Log In</button>
+            </form>
+        </section>
+
+        <section id="forgot-password" style="margin-top: 10pt;">
+            <button id="forgot-password-btn" onclick="forgotPassword()">Forgot password</button>
+            <form action="" id="forgot-password-form">
+                <h3>Reset your password</h3>
+                <input type="email" name="email" id="" placeholder="Enter your email" required>
+                <button type="submit">Get Reset Link</button>
+            </form>
+        </section>
+
+        <section>
+            <p>Not a User? - <a href="signup.html">Sign Up Now</a></p>
+            <p id="error" style="color:red"></p>
+        </section>
+    </main>
+
+
+    <script src="../scripts/login.js"></script>
+</body>
+
+</html>

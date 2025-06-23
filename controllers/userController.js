@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const { where } = require("sequelize");
-const { generateToken } = require("../util/generateToken");
+const { generateToken } = require("../utils/generateJWToken");
 
 exports.signup = async (req, res, next) => {
     try {

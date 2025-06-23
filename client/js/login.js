@@ -49,7 +49,7 @@ async function forgotPassword() {
 
         const email = event.target.email.value;
         const forgotPasswordResponse = await axios.post(
-            "http://localhost:3001/api/user/forgotpassword",
+            "http://localhost:3001/api/auth/forgotpassword   ",
             { email }
         );
         event.target.email.value = "";

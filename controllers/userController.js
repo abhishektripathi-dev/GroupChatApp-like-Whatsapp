@@ -5,7 +5,7 @@ const { generateToken } = require("../utils/generateJWToken");
 
 exports.signup = async (req, res, next) => {
     try {
-        const { fullName, email, password, phone } = req.body;
+        const { name: userName, phone, email, password } = req.body;
 
         const existingUser = await User.findOne({ where: { email } });
 
@@ -13,15 +13,13 @@ exports.signup = async (req, res, next) => {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        const saltRounds = 10;
-        const salt = await bcrypt.genSalt(saltRounds);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await User.create({
-            fullName,
+            userName,
             email,
-            password: hashedPassword,
             phone,
+            password: hashedPassword,
         });
 
         return res

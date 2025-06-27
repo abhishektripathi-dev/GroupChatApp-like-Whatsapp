@@ -28,3 +28,32 @@ chatBoxForm.addEventListener("submit", async (event) => {
         console.log(error);
     }
 });
+
+const messageTable = document.getElementById("message-table");
+
+async function loadMessage() {
+    const response = await axios.get(`${BASE_URL}/api/chat`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    const userNameArray = response.data.userName;
+    userNameArray.forEach((username) => {
+        const trEl = document.createElement("tr");
+        trEl.innerHTML = `<td><span>${username}:</span> Joined</td>`;
+        messageTable.appendChild(trEl);
+    });
+
+    const messageArray = response.data.message;
+    messageArray.forEach((item) => {
+        const trEl = document.createElement("tr");
+        trEl.innerHTML = `<td><span>${item.userName}:</span> ${item.message}</td>`;
+        messageTable.appendChild(trEl);
+    });
+}
+
+setInterval
+
+
+loadMessage();

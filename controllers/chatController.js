@@ -1,7 +1,7 @@
 const Message = require("../models/Message");
 const User = require("../models/User");
 
-exports.chatMsgToDb = async (req, res, next) => {
+exports.addChat = async (req, res, next) => {
     const { message } = req.body;
     const email = req.user.email;
 
@@ -15,4 +15,15 @@ exports.chatMsgToDb = async (req, res, next) => {
     } catch (error) {
         console.log(error);
     }
+};
+
+exports.getChat = async (req, res, next) => {
+    const message = await Message.findAll();
+    const user = await User.findAll({
+        attributes: ["userName"],
+    });
+
+    const userName = user.map((user) => user.userName);
+
+    res.json({ userName, message });
 };

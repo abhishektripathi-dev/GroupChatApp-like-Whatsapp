@@ -32,6 +32,7 @@ chatBoxForm.addEventListener("submit", async (event) => {
 const messageTable = document.getElementById("message-table");
 
 async function loadMessage() {
+    messageTable.innerHTML=""
     const response = await axios.get(`${BASE_URL}/api/chat`, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +54,8 @@ async function loadMessage() {
     });
 }
 
-setInterval
-
+setInterval(() => {
+    loadMessage();
+}, 1000);
 
 loadMessage();

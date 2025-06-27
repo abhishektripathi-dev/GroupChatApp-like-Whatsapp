@@ -11,7 +11,7 @@ exports.addChat = async (req, res, next) => {
         const userId = user.id;
 
         const newMessage = await Message.create({ userName, message, userId });
-        console.log(newMessage);
+        // console.log(newMessage);
     } catch (error) {
         console.log(error);
     }

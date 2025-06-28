@@ -24,6 +24,7 @@ chatBoxForm.addEventListener("submit", async (event) => {
             }
         );
         event.target.message.value = "";
+        await loadMessage();
     } catch (error) {
         console.log(error);
     }
@@ -32,7 +33,7 @@ chatBoxForm.addEventListener("submit", async (event) => {
 const messageTable = document.getElementById("message-table");
 
 async function loadMessage() {
-    messageTable.innerHTML=""
+    messageTable.innerHTML = "";
     const response = await axios.get(`${BASE_URL}/api/chat`, {
         headers: {
             Authorization: `Bearer ${token}`,
@@ -49,13 +50,16 @@ async function loadMessage() {
     const messageArray = response.data.message;
     messageArray.forEach((item) => {
         const trEl = document.createElement("tr");
-        trEl.innerHTML = `<td><span>${item.userName}:</span> ${item.message}</td>`;
+        trEl.innerHTML = `<td><span>${item.username}:</span> ${item.message}</td>`;
         messageTable.appendChild(trEl);
     });
+
+    // console.log(messageArray[messageArray.length-1].id)
+    localStorage.setItem()
 }
 
-setInterval(() => {
-    loadMessage();
-}, 1000);
+// setInterval(() => {
+//     loadMessage();
+// }, 1000);
 
 loadMessage();

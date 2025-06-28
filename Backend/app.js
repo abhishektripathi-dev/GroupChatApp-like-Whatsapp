@@ -19,9 +19,16 @@ const chatRoutes = require("./routes/chatRoutes");
 const PORT = process.env.PORT;
 
 const app = express();
+app.use(cors());
+// app.use(
+//     cors({
+//         origin: "*", // or your frontend port
+//         credentials: true,
+//         allowedHeaders: ["Content-Type", "Authorization"],
+//     })
+// );
 
 // Middlewares
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

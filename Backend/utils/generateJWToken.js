@@ -13,5 +13,6 @@ exports.generateToken = (user) => {
         throw new Error("Server configuration error");
     }
 
-    return jwt.sign(payload, secretKey, { expiresIn: "1h" });
+    // return jwt.sign(payload, secretKey, { expiresIn: "1h" });
+    return jwt.sign(payload, secretKey);
 };

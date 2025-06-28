@@ -18,12 +18,16 @@ exports.addChat = async (req, res, next) => {
 };
 
 exports.getChat = async (req, res, next) => {
-    const message = await Message.findAll();
+    const message = await Message.findAll({
+        attributes:["id", "username", "message"]
+    });
     const user = await User.findAll({
         attributes: ["userName"],
     });
 
     const userName = user.map((user) => user.userName);
+
+    // console.log(message)
 
     res.json({ userName, message });
 };

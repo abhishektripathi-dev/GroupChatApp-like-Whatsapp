@@ -1,3 +1,5 @@
+const { Op } = require("sequelize");
+
 const Message = require("../models/Message");
 const User = require("../models/User");
 
@@ -18,16 +20,38 @@ exports.addChat = async (req, res, next) => {
 };
 
 exports.getChat = async (req, res, next) => {
-    const message = await Message.findAll({
-        attributes:["id", "username", "message"]
-    });
-    const user = await User.findAll({
-        attributes: ["userName"],
-    });
+    try {
+        const lastId = req.query.id;
+        let messages;
 
-    const userName = user.map((user) => user.userName);
+        if (lastId) {
+            // Fetch messages with id greater than lastId
+            messages = await Message.findAll({
+                where: {
+                    id: {
+                        [Op.gt]: lastId,
+                    },
+                },
+                attributes: ["id", "username", "message"],
+            });
+        } else {
+            // Fetch all message
+            messages = await Message.findAll({
+                attributes: ["id", "username", "message"],
+            });
+        }
 
-    // console.log(message)
+        const user = await User.findAll({
+            attributes: ["userName"],
+        });
 
-    res.json({ userName, message });
+        const userName = user.map((user) => user.userName);
+
+        // console.log(message)
+
+        res.json({ userName, message: messages });
+    } catch (error) {
+        console.log("Error in chat controller", error.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 };

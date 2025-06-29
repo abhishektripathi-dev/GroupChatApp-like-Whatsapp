@@ -1,4 +1,6 @@
 const token = localStorage.getItem("token");
+let messagesFromLocalStorage =
+    JSON.parse(localStorage.getItem("message")) || [];
 
 if (!token) {
     alert("You need to log in to access this page.");
@@ -6,60 +8,116 @@ if (!token) {
 }
 
 const BASE_URL = "http://localhost:3001";
-
 const chatBoxForm = document.getElementById("chatBox");
+const messageTable = document.getElementById("message-table");
+
+// Create and add "Load Older Messages" button
+const loadOlderBtn = document.createElement("button");
+loadOlderBtn.textContent = "Load Older Messages";
+loadOlderBtn.style.display = "block";
+loadOlderBtn.style.margin = "10px auto";
+loadOlderBtn.onclick = async function () {
+    await loadAllMessages();
+};
+document.querySelector(".container").prepend(loadOlderBtn);
 
 chatBoxForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const message = event.target.message.value;
-    console.log(message);
-
+    const messageText = event.target.message.value;
     try {
-        let response = await axios.post(
+        await axios.post(
             `${BASE_URL}/api/chat`,
-            { message },
+            { message: messageText },
             {
                 headers: { Authorization: `Bearer ${token}` },
             }
         );
         event.target.message.value = "";
-        await loadMessage();
+        await loadMessages();
     } catch (error) {
         console.log(error);
     }
 });
 
-const messageTable = document.getElementById("message-table");
-
-async function loadMessage() {
+async function loadMessages() {
     messageTable.innerHTML = "";
-    const response = await axios.get(`${BASE_URL}/api/chat`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+    let apiResponse;
+    if (messagesFromLocalStorage.length === 0) {
+        apiResponse = await axios.get(`${BASE_URL}/api/chat?id=0`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    } else {
+        apiResponse = await axios.get(
+            `${BASE_URL}/api/chat?id=${
+                messagesFromLocalStorage[messagesFromLocalStorage.length - 1].id
+            }`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+    }
+
+    const joinedUsernames = apiResponse.data.userName || [];
+    joinedUsernames.forEach((username) => {
+        const trElement = document.createElement("tr");
+        trElement.innerHTML = `<td><span>${username}:</span> Joined</td>`;
+        messageTable.appendChild(trElement);
     });
 
-    const userNameArray = response.data.userName;
-    userNameArray.forEach((username) => {
-        const trEl = document.createElement("tr");
-        trEl.innerHTML = `<td><span>${username}:</span> Joined</td>`;
-        messageTable.appendChild(trEl);
+    // Merge and keep only last 10 messages
+    const allMessages = [
+        ...messagesFromLocalStorage,
+        ...(apiResponse.data.message || []),
+    ];
+    const lastTenMessages = allMessages.slice(-10);
+
+    lastTenMessages.forEach((item) => {
+        const trElement = document.createElement("tr");
+        trElement.innerHTML = `<td><span>${item.username}:</span> ${item.message}</td>`;
+        messageTable.appendChild(trElement);
     });
 
-    const messageArray = response.data.message;
-    messageArray.forEach((item) => {
-        const trEl = document.createElement("tr");
-        trEl.innerHTML = `<td><span>${item.username}:</span> ${item.message}</td>`;
-        messageTable.appendChild(trEl);
-    });
-
-    // console.log(messageArray[messageArray.length-1].id)
-    localStorage.setItem()
+    messagesFromLocalStorage = lastTenMessages;
+    localStorage.setItem("message", JSON.stringify(lastTenMessages));
 }
 
-// setInterval(() => {
-//     loadMessage();
-// }, 1000);
+async function loadAllMessages() {
+    try {
+        messageTable.innerHTML = "";
+        const apiResponse = await axios.get(`${BASE_URL}/api/chat`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
 
-loadMessage();
+        const joinedUsernames = apiResponse.data.userName || [];
+        joinedUsernames.forEach((username) => {
+            const trElement = document.createElement("tr");
+            trElement.innerHTML = `<td><span>${username}:</span> Joined</td>`;
+            messageTable.appendChild(trElement);
+        });
+
+        const allMessages = apiResponse.data.message || [];
+        allMessages.forEach((item) => {
+            const trElement = document.createElement("tr");
+            trElement.innerHTML = `<td><span>${item.username}:</span> ${item.message}</td>`;
+            messageTable.appendChild(trElement);
+        });
+
+        // Optionally update localStorage with last 10 messages
+        messagesFromLocalStorage = allMessages.slice(-10);
+        localStorage.setItem(
+            "message",
+            JSON.stringify(messagesFromLocalStorage)
+        );
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+loadMessages();

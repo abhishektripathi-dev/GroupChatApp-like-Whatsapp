@@ -3,7 +3,7 @@ require("dotenv").config();
 
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-exports.authenticate = (req, res, next) => {
+const authenticate = (req, res, next) => {
     // The question mark (?.) is the optional chaining operator in
     const token = req.headers.authorization?.split(" ")[1];
 
@@ -21,6 +21,8 @@ exports.authenticate = (req, res, next) => {
         return res.status(403).json({ message: "Invalid or expired token" });
     }
 };
+
+module.exports = authenticate;
 
 // The question mark (?.) is the optional chaining operator in JavaScript.
 // It safely accesses the authorization property of req.headers only if it exists.
